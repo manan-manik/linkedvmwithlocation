@@ -1,0 +1,71 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "Vnet_Name": {
+            "type": "Array"
+        },
+        "Vnet_Location": {
+            "type": "Array"
+        },
+        "Vnet_AddressSpace":{
+            "type": "Array"
+        },
+        "Vnet_Tags": {
+            "type": "Object"
+        },
+        "Subnet_Name":{
+            "type": "Array"
+        },
+        "Subnet_Address_Space":{
+            "type": "Array"
+        },
+        "Vnet_Subnet_Mapping_Name":{
+            "type": "Array"
+        }
+    },
+    "variables": {},
+    "resources": 
+    [
+        {
+            "type"      : "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-11-01",
+            "copy"      : 
+            {
+             "name"     : "Vnet",
+             "count"    : "[length(parameters('Vnet_Name'))]",
+             "mode"     : "Serial"
+            },
+            "name"      : "[parameters('Vnet_Name')[copyIndex('Vnet')]]",
+            "location"  : "[parameters('Vnet_Location')[copyIndex('Vnet')]]",
+            "tags"      : "[parameters('Vnet_tags')]",
+            "properties":
+            {
+                "addressSpace": 
+                {
+                    "addressPrefixes": ["[parameters('Vnet_AddressSpace')[copyIndex('Vnet')]]"]
+                }
+                  
+            }
+        },
+        {
+            "type"      : "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2020-11-01",
+            "copy"      : 
+            {
+             "name"     : "Subnets",
+             "count"    : "[length(parameters('Subnet_Name'))]",
+             "mode"     : "Serial"
+            },
+            "name"      : "[concat(parameters('Vnet_Subnet_Mapping_Name')[copyIndex('Subnets')],'/',parameters('Subnet_Name')[copyIndex('Subnets')])]",
+            "dependsOn" :
+            [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('Vnet_Subnet_Mapping_Name')[copyIndex('Subnets')])]"
+            ],
+            "properties":
+            {
+                "addressPrefix"      : "[parameters('Subnet_Address_Space')[copyIndex('Subnets')]]"
+            }
+        }
+    ]    
+}

@@ -1,0 +1,64 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "Vnet_VM_Mapping_Name": {
+            "value": ["VNet1","VNet3","VNet5","VNet4"]
+        },
+        "Subnet_VM_Mapping_Name": {
+            "value": ["Subnet2","Subnet4","Subnet7","Subnet5"] 
+        },  
+         "Private_IP_AllocationMethod":{
+            "value": ["Dynamic","Dynamic","Dynamic","Dynamic"]
+         },
+        "NIC_Tags": {
+            "value": 
+            {
+                "Environment": "Dev",
+                "Owner"      : "Jake"  
+            }
+        },
+        "VM_Tags": {
+            "value": 
+            {
+                "Environment": "Dev",
+                "Owner"      : "Jake"
+            }
+        },
+        "VM_Publisher": {
+            "value": ["Canonical","Canonical","Canonical","Canonical"]
+        },
+        "VM_Offer": 
+        {
+            "value": ["UbuntuServer","UbuntuServer","UbuntuServer","UbuntuServer"]
+        },
+        "VM_Version": {
+            "value": ["latest","latest","latest","latest"]
+        },
+        "VM_Name": {
+            "value": ["VM1","VM2","VM3","VM4"] 
+        },
+        "VM_Location": {
+            "value": ["eastus","eastus","eastus","eastus"]
+        },
+        "VM_Computername": {
+            "value": ["MyPC","MyPC","MyPC","MyPC"] 
+        },
+        "VM_UserName": {
+            "value": ["mananmanik","mananmanik","mananmanik","mananmanik"]
+        },
+        "VM_Password": {
+            "value": ["Qwerty@12345","Qwerty@12345","Qwerty@12345","Qwerty@12345"] 
+        },
+        "VM_Size": {
+            "value": ["Standard_B1s","Standard_B1s","Standard_B1s","Standard_B1s"] 
+        },
+        "VM_CreateOption": {
+            "value": ["FromImage","FromImage","FromImage","FromImage"]
+        },
+        "VM_SKU": {
+            "value": ["16.04-LTS","16.04-LTS","16.04-LTS","16.04-LTS"]
+        }        
+    }
+
+}

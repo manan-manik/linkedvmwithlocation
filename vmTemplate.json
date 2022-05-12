@@ -1,0 +1,143 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "Vnet_VM_Mapping_Name": {
+            "type": "Array"
+        },
+        "Subnet_VM_Mapping_Name":{
+            "type": "Array"
+        },
+        "Private_IP_AllocationMethod":{
+            "type": "Array"
+         },
+        "NIC_Tags": {
+            "type": "object"
+        },
+        "VM_Tags": {
+            "type": "object"
+        },
+        "VM_Publisher": {
+            "type": "Array"
+        },
+        "VM_Offer": {
+            "type": "Array"
+        },
+        "VM_Version": {
+            "type": "Array"
+        },
+        "VM_Name": {
+            "type": "Array"
+        },
+        "VM_Location": {
+            "type": "Array"
+        },
+        "VM_Computername": {
+            "type": "Array"
+        },
+        "VM_Size": {
+            "type": "Array"
+        },
+        "VM_UserName": {
+            "type": "array"
+        },
+        "VM_Password": {
+            "type": "array"
+        },
+        "VM_CreateOption": {
+            "type": "array"
+        },
+        "VM_SKU":
+        {
+            "type": "array"
+        }
+
+    },
+    "variables": {},
+    "resources": 
+    [
+        {
+            "apiVersion"    : "2021-03-01",
+            "type"          : "Microsoft.Network/networkInterfaces",
+            "copy"          : 
+            {
+                "name"         : "NIC",
+                "count"        : "[length(parameters('VM_Name'))]",
+                "mode"         : "Serial"
+            },
+            "name"          : "[concat(parameters('VM_Name')[copyIndex('NIC')],'-nic')]",
+            "location"      : "[parameters('VM_Location')[copyIndex('NIC')]]",
+            "tags"          : "[parameters('NIC_Tags')]",
+            "properties"        : 
+            {
+             "ipConfigurations":
+            [
+                {
+                    "name"      : "[toLower(concat(parameters('VM_Name')[copyIndex('NIC')],'-nic'))]",
+                    "properties":
+                    {
+                        "privateIPAllocationMethod" : "[parameters('Private_IP_AllocationMethod')[copyIndex('NIC')]]",
+                        "subnet" : 
+                        {
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Vnet_VM_Mapping_Name')[copyIndex('NIC')],parameters('Subnet_VM_Mapping_Name')[copyIndex('NIC')])]"
+                        }
+                    }
+                }
+            ]
+            }
+        },
+        {
+           "type"        : "Microsoft.Compute/virtualMachines",
+            "apiVersion" : "2021-07-01",
+            "copy"       : 
+            {
+                "name"      : "VM",
+                "count"     : "[length(parameters('VM_Name'))]",
+                "mode"      : "Serial"
+            },
+            "name"       : "[parameters('VM_Name')[copyIndex('VM')]]",
+            "location"   : "[parameters('VM_Location')[copyIndex('VM')]]",
+            "tags"       : "[parameters('VM_Tags')]",
+            "dependsOn"  :
+            [
+              "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('VM_Name')[copyIndex('VM')],'-nic'))]"
+            ],
+            "properties" : 
+            {
+                "hardwareProfile":
+                {
+                    "vmSize" : "[parameters('VM_Size')[copyIndex('VM')]]"
+                },
+                "osProfile"      :
+                {
+                    "computerName"  : "[parameters('VM_Computername')[copyIndex('VM')]]",
+                    "adminUsername" : "[parameters('VM_UserName')[copyIndex('VM')]]",
+                    "adminPassword" : "[parameters('VM_Password')[copyIndex('VM')]]"
+                },
+                "storageProfile":
+                {
+                    "imageReference":
+                    {
+                        "publisher" : "[parameters('VM_Publisher')[copyIndex('VM')]]",
+                        "offer"     : "[parameters('VM_Offer')[copyIndex('VM')]]",
+                        "sku"       : "[parameters('VM_SKU')[copyIndex('VM')]]",
+                        "version"   : "[parameters('VM_Version')[copyIndex('VM')]]"
+                    },
+                    "osDisk":
+                    {
+                        "createOption"  : "[parameters('VM_CreateOption')[copyIndex('VM')]]"
+                    }
+                },
+                "networkProfile":
+                {
+                    "networkInterfaces":
+                    [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('VM_Name')[copyIndex('VM')],'-nic'))]"
+                        }
+                    ] 
+                }     
+            } 
+        }    
+    ]
+}

@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "Vnet_Name": {
+            "value": ["VNet1","Vnet2","Vnet3","Vnet4","Vnet5"]
+        },
+        "Vnet_Location": {
+            "value": ["eastus","eastus","eastus","eastus","eastus"]
+        },
+        "Vnet_AddressSpace": {
+            "value": ["10.1.0.0/16","10.2.0.0/16","10.3.0.0/16","10.4.0.0/16","10.5.0.0/16"]
+        },
+        "Vnet_Tags": {
+            "value": {
+                "Environment": "Dev",
+                "Owner"      : "Jake"
+            }
+        },
+        "Subnet_Name": {
+            "value": [
+                "Subnet1","Subnet2","Subnet3","Subnet4","Subnet5","Subnet6","Subnet7"
+            ]
+        },
+        "Subnet_Address_Space": {
+            "value": [
+                "10.1.0.0/24","10.1.1.0/24","10.2.0.0/24","10.3.0.0/24","10.4.0.0/24","10.4.1.0/24","10.5.0.0/24"
+            ]
+        },
+        "Vnet_Subnet_Mapping_Name": {
+            "value": [
+                "VNet1","VNet1","Vnet2","Vnet3","Vnet4","Vnet4","Vnet5"
+            ]
+        }
+    }
+}
