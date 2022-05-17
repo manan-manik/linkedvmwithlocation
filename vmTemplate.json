@@ -79,7 +79,7 @@
                         "privateIPAllocationMethod" : "[parameters('Private_IP_AllocationMethod')[copyIndex('NIC')]]",
                         "subnet" : 
                         {
-                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Vnet_VM_Mapping_Name')[copyIndex('NIC')],parameters('Subnet_VM_Mapping_Name')[copyIndex('NIC')])]"
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets',parameters('Vnet_VM_Mapping_Name'),parameters('Subnet_VM_Mapping_Name')[copyIndex('NIC')])]"
                         }
                     }
                 }
