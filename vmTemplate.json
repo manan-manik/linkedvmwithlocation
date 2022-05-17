@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Vnet_VM_Mapping_Name": {
-            "type": "Array"
+            "type": "String"
         },
         "Subnet_VM_Mapping_Name":{
             "type": "Array"
